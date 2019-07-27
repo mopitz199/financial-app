@@ -3,46 +3,18 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 
 import DataCard1 from '../components/data-card-1';
-import IRPVChart from '../components/irpv-chart';
+import IDPVAppartmentChart from '../components/irpv-appartment-chart';
+import IDPVHouseChart from '../components/irpv-house-chart';
+import SuppyDemandChart from '../components/suppy-demand-chart';
+import InterestRateChart from '../components/interest-rate-chart';
 
-import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent'
-import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
-} from 'recharts';
-
-
-const data = [
-  {
-    name: 'Page A', uv: 4000, pv: 2400, amt: 2400,
-  },
-  {
-    name: 'Page B', uv: 3000, pv: 1398, amt: 2210,
-  },
-  {
-    name: 'Page C', uv: 2000, pv: 9800, amt: 2290,
-  },
-  {
-    name: 'Page D', uv: 2780, pv: 3908, amt: 2000,
-  },
-  {
-    name: 'Page E', uv: 1890, pv: 4800, amt: 2181,
-  },
-  {
-    name: 'Page F', uv: 2390, pv: 3800, amt: 2500,
-  },
-  {
-    name: 'Page G', uv: 3490, pv: 4300, amt: 2100,
-  },
-];
 
 export default function Indicators(){
   const theme = useTheme();
   const [irpdData, setIrpdData] = useState([])
   const [nationalOfferData, setNationalOfferData] = useState([])
-  const [appartmentInterestRateData, setAppartmentInterestRateData] = useState([])
+  const [mortgageInterestRateData, setMortgageInterestRateData] = useState([])
   const [consumerCreditInterestRateData, setConsumerCreditInterestRateData] = useState([])
   const [commercialInterestRateData, setCommercialInterestRateData] = useState([])
 
@@ -58,7 +30,7 @@ export default function Indicators(){
     
     fetch('https://alf8ptidv9.execute-api.us-east-1.amazonaws.com/prod/appartment-interest-rate')
       .then(data => data.json())
-      .then((data) => setAppartmentInterestRateData(data));
+      .then((data) => setMortgageInterestRateData(data));
 
     fetch('https://alf8ptidv9.execute-api.us-east-1.amazonaws.com/prod/consumer-credit-interest-rate')
       .then(data => data.json())
@@ -71,124 +43,105 @@ export default function Indicators(){
       .then((data) => setCommercialInterestRateData(data));
   }, [])
 
-  function buildData2(){
-    var resp = []
-    nationalOfferData.forEach(element => {
-      resp.push({
-        'name': `${element['name'][0]}`.slice(-2),
-        'monthAppartments': Number(element['data'][2].toFixed(2)),
-        'monthHouses': Number(element['data'][5].toFixed(2)),
-      })
+  function getAppreciationRate(){
+    let resp = {
+      'dpto_santiago_centro': 0,
+      'dpto_nor_poniente': 0,
+      'dpto_nor_oriente': 0,
+      'dpto_sur': 0,
+      'casa_nor_poniente': 0,
+      'casa_nor_oriente': 0,
+      'casa_sur': 0
+    }
+    let total_elements = 0
+    irpdData.map((e, index) => {
+      total_elements+=1
+      resp['casa_nor_poniente'] += e.data[10]
+      resp['casa_nor_oriente'] += e.data[11]
+      resp['casa_sur'] += e.data[12]
+      resp['dpto_santiago_centro'] += e.data[13]
+      resp['dpto_nor_poniente'] += e.data[14]
+      resp['dpto_nor_oriente'] += e.data[15]
+      resp['dpto_sur'] += e.data[16]
     })
+
+    for(let attrName in resp){
+      if(resp.hasOwnProperty(attrName)){
+        if(total_elements!==0){
+          resp[attrName] = resp[attrName] / total_elements
+        }else{
+          resp[attrName] = '???'
+        }
+      }
+    }
+
+    if(total_elements!==0){
+      resp['casa_general'] = (resp['casa_nor_poniente'] + resp['casa_nor_oriente'] + resp['casa_sur']) / 3
+      resp['dpto_general'] = (resp['dpto_santiago_centro'] + resp['dpto_nor_oriente'] + resp['dpto_nor_oriente'] + resp['dpto_sur']) / 4
+    }else{
+      resp['casa_general'] = '???'
+      resp['dpto_general'] = '???'
+    }
+
+    for(let attrName in resp){
+      if(resp.hasOwnProperty(attrName)){
+        if(total_elements!==0){
+          resp[attrName] = Number(resp[attrName].toFixed(2))
+          resp[attrName] = `${resp[attrName]}%`
+        }else{
+          resp[attrName] = '???'
+        }
+      }
+    }
+
     return resp
   }
 
-  function buildData3(){
-    var resp = []
-    nationalOfferData.forEach(element => {
-      resp.push({
-        'name': `${element['name'][0]}`.slice(-2),
-        'monthAppartments': Number(element['data'][2].toFixed(2)),
-        'monthHouses': Number(element['data'][5].toFixed(2)),
-      })
-    })
-    return resp
-  }
+  const appreciationRateData = getAppreciationRate()
 
   return (
     <Grid container>
       <Grid container justify="space-between" spacing={4}>
-        <Grid item lg={4} md={6} xs={12}>
+        <Grid item lg={6} md={6} xs={12}>
           <DataCard1
             title="Tasa apreciacion promedio (departamento)"
-            bigNumber={4.56}
+            bigNumber={appreciationRateData['dpto_general']}
             otherItems={[
-              {'title': 'Stgo Centro', 'value': 4.56},
-              {'title': 'Stgo Centro', 'value': 4.56},
-              {'title': 'Stgo Centro', 'value': 4.56},
-              {'title': 'Stgo Centro', 'value': 4.56},
+              {'title': 'Stgo Centro', 'value': appreciationRateData['dpto_santiago_centro']},
+              {'title': 'Nor Poniente', 'value': appreciationRateData['dpto_nor_poniente']},
+              {'title': 'Nor oriente', 'value': appreciationRateData['dpto_nor_oriente']},
+              {'title': 'Sur', 'value': appreciationRateData['dpto_sur']},
             ]}
           />
         </Grid>
-        <Grid item lg={4} md={6} xs={12}>
+        <Grid item lg={6} md={6} xs={12}>
           <DataCard1
-            title="Tasa apreciacion promedio (departamento)"
-            bigNumber={4.56}
+            title="Tasa apreciacion promedio (casa)"
+            bigNumber={appreciationRateData['casa_general']}
             otherItems={[
-              {'title': 'Stgo Centro', 'value': 4.56},
-              {'title': 'Stgo Centro', 'value': 4.56},
-              {'title': 'Stgo Centro', 'value': "4.56%"},
+              {'title': 'Nor poniente', 'value': appreciationRateData['casa_nor_poniente']},
+              {'title': 'Nor oriente', 'value': appreciationRateData['casa_nor_oriente']},
+              {'title': 'Sur', 'value': appreciationRateData['casa_sur']},
             ]}
-          />
-        </Grid>
-        <Grid item lg={4} md={12} xs={12}>
-          <DataCard1
-            title="Tasa apreciacion promedio (departamento)"
-            bigNumber={4.56}
           />
         </Grid>
       </Grid>
       <Grid container justify="space-between" spacing={4} style={{marginTop: theme.spacing(2)}}>
         <Grid item lg={6} md={12} xs={12}>
-          <IRPVChart irpdData={irpdData}/>
+          <IDPVAppartmentChart irpdData={irpdData}/>
         </Grid>
         <Grid item lg={6} md={12} xs={12}>
-          <Card style={{padding: theme.spacing(3)}}>
-            <CardContent style={{padding: theme.spacing(0)}}>
-              <Typography color="textSecondary" variant="h6" component="h2">
-                Indice Oferta y Demanda
-              </Typography>
-              <ResponsiveContainer width="100%" height={350}>
-                <LineChart data={buildData2()}>
-                  <Line name="Departamentos" type="monotone" dataKey="monthAppartments" stroke="#8884d8" dot={false}/>
-                  <Line name="Casas" type="monotone" dataKey="monthHouses" stroke="#d96523" dot={false}/>
-                  <XAxis dataKey="name" interval={11}/>
-                  <YAxis type="number" domain={['dataMin', 'dataMax']}/>
-                  <Tooltip />
-                  <Legend />
-                  <CartesianGrid strokeDasharray="3 3" />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          <IDPVHouseChart irpdData={irpdData}/>
         </Grid>
         <Grid item lg={6} md={12} xs={12}>
-          <Card style={{padding: theme.spacing(3)}}>
-            <CardContent style={{padding: theme.spacing(0)}}>
-              <Typography color="textSecondary" variant="h6" component="h2">
-                Tasa interes credito consumo
-              </Typography>
-              <ResponsiveContainer width="100%" height={350}>
-                <LineChart data={consumerCreditInterestRateData}>
-                  <Line name="Credito consumo" type="monotone" dataKey="value" stroke="#8884d8" dot={false}/>
-                  <XAxis dataKey="name" interval={11}/>
-                  <YAxis type="number" domain={[0, 'dataMax']}/>
-                  <Tooltip />
-                  <Legend />
-                  <CartesianGrid strokeDasharray="3 3" />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          <SuppyDemandChart nationalOfferData={nationalOfferData}/>
         </Grid>
         <Grid item lg={6} md={12} xs={12}>
-          <Card style={{padding: theme.spacing(3)}}>
-            <CardContent style={{padding: theme.spacing(0)}}>
-              <Typography color="textSecondary" variant="h6" component="h2">
-                Tasa interes credito hipotecario
-              </Typography>
-              <ResponsiveContainer width="100%" height={350}>
-                <LineChart data={appartmentInterestRateData}>
-                  <Line name="Credito hipotecario" type="monotone" dataKey="value" stroke="#8884d8" dot={false}/>
-                  <Tooltip />
-                  <XAxis dataKey="name" interval={11}/>
-                  <YAxis type="number" domain={[0, 'dataMax']}/>
-                  <Legend />
-                  <CartesianGrid strokeDasharray="3 3" />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          <InterestRateChart
+            mortgageInterestRateData={mortgageInterestRateData}
+            consumerCreditInterestRateData={consumerCreditInterestRateData}
+            commercialInterestRateData={commercialInterestRateData}
+          />
         </Grid>
       </Grid>
     </Grid>

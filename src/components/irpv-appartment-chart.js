@@ -6,7 +6,7 @@ import {
 
 import BaseChartCard from './base-chart-card';
 
-export default function IDPVChart(props){
+export default function IDPVAppartmentChart(props){
 
   const [hideSantiagoCentro, setHideSantiagoCentro] = useState(false)
   const [hideNorPoniente, setHideNorPoniente] = useState(false)
@@ -27,18 +27,25 @@ export default function IDPVChart(props){
     return resp
   }
 
-  function onLegendClick(data){
-    switch (data.dataKey) {
-      case 'santiago_centro':
+  const legendData = [
+    {'key': 'santiago_centro', 'color': 'red', 'title': 'Santiago Centro'},
+    {'key': 'nor_poniente', 'color': 'blue', 'title': 'Nor Poniente'},
+    {'key': 'nor_oriente', 'color': 'green', 'title': 'Nor Oriente'},
+    {'key': 'sur', 'color': 'pink', 'title': 'Sur'},
+  ]
+
+  function onLegendClick(key){
+    switch (key) {
+      case legendData[0].key:
         setHideSantiagoCentro(!hideSantiagoCentro)
         break;
-      case 'nor_poniente':
+      case legendData[1].key:
         setHideNorPoniente(!hideNorPoniente)
         break;
-      case 'nor_oriente':
+      case legendData[2].key:
         setHideNorOriente(!hideNorOriente)
         break;
-      case 'sur':
+      case legendData[3].key:
         setHideSur(!hideSur)
         break;
       default:
@@ -47,44 +54,46 @@ export default function IDPVChart(props){
   }
 
   return(
-    <BaseChartCard title="Indice Real Precio Viviendas (departamentos)">
+    <BaseChartCard
+      title="Indice Real Precio Viviendas (departamentos)"
+      legendData={legendData}
+      onLegendClick={onLegendClick}
+    >
       <LineChart data={buildData()}>
         {!hideSantiagoCentro &&
           <Line
-          name="Santiago Centro"
           type="monotone"
-          dataKey="santiago_centro"
-          stroke="#ff1100"
+          dataKey={legendData[0].key}
+          stroke={legendData[0].color}
           dot={false}/>
         }
 
         {!hideNorPoniente &&
           <Line
-          name="Nor Poniente"
           type="monotone"
-          dataKey="nor_poniente"
-          stroke="#22ff00" dot={false}/>
+          dataKey={legendData[1].key}
+          stroke={legendData[1].color}
+          dot={false}/>
         }
 
         {!hideNorOriente &&
           <Line
-          name="Nor Oriente"
           type="monotone"
-          dataKey="nor_oriente"
-          stroke="#0800ff" dot={false}/>
+          dataKey={legendData[2].key}
+          stroke={legendData[2].color}
+          dot={false}/>
         }
         
         {!hideSur &&
           <Line
-          name="Sur"
           type="monotone"
-          dataKey="sur"
-          stroke="#f200ff" dot={false}/>
+          dataKey={legendData[3].key}
+          stroke={legendData[3].color}
+          dot={false}/>
         }
 
         <XAxis dataKey="name" interval={11}/>
         <YAxis orientation="left"  type="number" domain={[0, 'dataMax']}/>
-        <Legend/>
         <Tooltip />
         <CartesianGrid strokeDasharray="3 3" />
       </LineChart>

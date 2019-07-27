@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 
 import MediaQuery from 'react-responsive';
@@ -101,6 +101,37 @@ export default function MiniDrawer() {
   const [open, setOpen] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(pages[0]);
 
+  const [irpdData, setIrpdData] = useState([])
+  const [nationalOfferData, setNationalOfferData] = useState([])
+  const [mortgageInterestRateData, setMortgageInterestRateData] = useState([])
+  const [consumerCreditInterestRateData, setConsumerCreditInterestRateData] = useState([])
+  const [commercialInterestRateData, setCommercialInterestRateData] = useState([])
+
+  useEffect(() => {
+    fetch('https://alf8ptidv9.execute-api.us-east-1.amazonaws.com/prod/irpv-data')
+      .then(data => data.json())
+      .then((data) => setIrpdData(data));
+
+    fetch('https://alf8ptidv9.execute-api.us-east-1.amazonaws.com/prod/national-offer')
+      .then(data => data.json())
+      .then((data) => setNationalOfferData(data));
+
+    
+    fetch('https://alf8ptidv9.execute-api.us-east-1.amazonaws.com/prod/appartment-interest-rate')
+      .then(data => data.json())
+      .then((data) => setMortgageInterestRateData(data));
+
+    fetch('https://alf8ptidv9.execute-api.us-east-1.amazonaws.com/prod/consumer-credit-interest-rate')
+      .then(data => data.json())
+      .then((data) => {
+        setConsumerCreditInterestRateData(data)
+      });
+
+    fetch('https://alf8ptidv9.execute-api.us-east-1.amazonaws.com/prod/commercial-interest-rate')
+      .then(data => data.json())
+      .then((data) => setCommercialInterestRateData(data));
+  }, [])
+
   function handleDrawerOpen() {
     setOpen(true);
   }
@@ -112,7 +143,13 @@ export default function MiniDrawer() {
   function renderCurrentPage(){
     if(currentPage==="Graficos"){
       return (
-        <Indicators />
+        <Indicators
+          irpdData={irpdData}
+          nationalOfferData={nationalOfferData}
+          mortgageInterestRateData={mortgageInterestRateData}
+          consumerCreditInterestRateData={consumerCreditInterestRateData}
+          commercialInterestRateData={commercialInterestRateData}
+        />
       )
     }else{
       return (

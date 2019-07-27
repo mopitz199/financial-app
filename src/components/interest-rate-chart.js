@@ -45,7 +45,7 @@ export default function InterestRateChart(props){
     for (var name in auxResp) {
       if (auxResp.hasOwnProperty(name)) {
         let dataObject = auxResp[name]
-        dataObject['name'] = name
+        dataObject['name'] = name.split(".")[1].slice(-2)
         resp.push(dataObject)
       }
     }
@@ -79,12 +79,14 @@ export default function InterestRateChart(props){
     <BaseChartCard
       title="Tasas de interes"
       legendData={legendData}
+      dataLength={props.commercialInterestRateData.length}
       onLegendClick={onLegendClick}
     >
       <LineChart data={buildData()}>
         {!hideMortgageCreditInterestRate &&
           <Line
           type="monotone"
+          name={legendData[0].title}
           dataKey={legendData[0].key}
           stroke={legendData[0].color}
           dot={false}/>
@@ -93,6 +95,7 @@ export default function InterestRateChart(props){
         {!hideConsumerCreditRate &&
           <Line
           type="monotone"
+          name={legendData[1].title}
           dataKey={legendData[1].key}
           stroke={legendData[1].color}
           dot={false}/>
@@ -101,6 +104,7 @@ export default function InterestRateChart(props){
         {!hideCommercialCreditRate &&
           <Line
           type="monotone"
+          name={legendData[2].title}
           dataKey={legendData[2].key}
           stroke={legendData[2].color}
           dot={false}/>

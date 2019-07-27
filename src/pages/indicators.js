@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -8,40 +8,10 @@ import IDPVHouseChart from '../components/irpv-house-chart';
 import SuppyDemandChart from '../components/suppy-demand-chart';
 import InterestRateChart from '../components/interest-rate-chart';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 
-export default function Indicators(){
+export default function Indicators(props){
   const theme = useTheme();
-  const [irpdData, setIrpdData] = useState([])
-  const [nationalOfferData, setNationalOfferData] = useState([])
-  const [mortgageInterestRateData, setMortgageInterestRateData] = useState([])
-  const [consumerCreditInterestRateData, setConsumerCreditInterestRateData] = useState([])
-  const [commercialInterestRateData, setCommercialInterestRateData] = useState([])
-
-  useEffect(() => {
-    fetch('https://alf8ptidv9.execute-api.us-east-1.amazonaws.com/prod/irpv-data')
-      .then(data => data.json())
-      .then((data) => setIrpdData(data));
-
-    fetch('https://alf8ptidv9.execute-api.us-east-1.amazonaws.com/prod/national-offer')
-      .then(data => data.json())
-      .then((data) => setNationalOfferData(data));
-
-    
-    fetch('https://alf8ptidv9.execute-api.us-east-1.amazonaws.com/prod/appartment-interest-rate')
-      .then(data => data.json())
-      .then((data) => setMortgageInterestRateData(data));
-
-    fetch('https://alf8ptidv9.execute-api.us-east-1.amazonaws.com/prod/consumer-credit-interest-rate')
-      .then(data => data.json())
-      .then((data) => {
-        setConsumerCreditInterestRateData(data)
-      });
-
-    fetch('https://alf8ptidv9.execute-api.us-east-1.amazonaws.com/prod/commercial-interest-rate')
-      .then(data => data.json())
-      .then((data) => setCommercialInterestRateData(data));
-  }, [])
 
   function getAppreciationRate(){
     let resp = {
@@ -54,7 +24,7 @@ export default function Indicators(){
       'casa_sur': 0
     }
     let total_elements = 0
-    irpdData.map((e, index) => {
+    props.irpdData.map((e, index) => {
       total_elements+=1
       resp['casa_nor_poniente'] += e.data[10]
       resp['casa_nor_oriente'] += e.data[11]
@@ -128,19 +98,19 @@ export default function Indicators(){
       </Grid>
       <Grid container justify="space-between" spacing={4} style={{marginTop: theme.spacing(2)}}>
         <Grid item lg={6} md={12} xs={12}>
-          <IDPVAppartmentChart irpdData={irpdData}/>
+          <IDPVAppartmentChart irpdData={props.irpdData}/>
         </Grid>
         <Grid item lg={6} md={12} xs={12}>
-          <IDPVHouseChart irpdData={irpdData}/>
+          <IDPVHouseChart irpdData={props.irpdData}/>
         </Grid>
         <Grid item lg={6} md={12} xs={12}>
-          <SuppyDemandChart nationalOfferData={nationalOfferData}/>
+          <SuppyDemandChart nationalOfferData={props.nationalOfferData}/>
         </Grid>
         <Grid item lg={6} md={12} xs={12}>
           <InterestRateChart
-            mortgageInterestRateData={mortgageInterestRateData}
-            consumerCreditInterestRateData={consumerCreditInterestRateData}
-            commercialInterestRateData={commercialInterestRateData}
+            mortgageInterestRateData={props.mortgageInterestRateData}
+            consumerCreditInterestRateData={props.consumerCreditInterestRateData}
+            commercialInterestRateData={props.commercialInterestRateData}
           />
         </Grid>
       </Grid>

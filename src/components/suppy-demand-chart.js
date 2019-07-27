@@ -45,6 +45,7 @@ export default function SuppyDemandChart(props){
     <BaseChartCard
       title="Indice oferta demanda"
       legendData={legendData}
+      dataLength={props.nationalOfferData.length}
       onLegendClick={onLegendClick}
     >
       <LineChart data={buildData()}>
@@ -52,6 +53,7 @@ export default function SuppyDemandChart(props){
         {!hideAppartments &&
           <Line
           type="monotone"
+          name={legendData[0].title}
           dataKey={legendData[0].key}
           stroke={legendData[0].color}
           dot={false}/>
@@ -60,6 +62,7 @@ export default function SuppyDemandChart(props){
         {!hideHouses &&
           <Line
           type="monotone"
+          name={legendData[1].title}
           dataKey={legendData[1].key}
           stroke={legendData[1].color}
           dot={false}/>

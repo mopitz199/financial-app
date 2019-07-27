@@ -57,12 +57,14 @@ export default function IDPVAppartmentChart(props){
     <BaseChartCard
       title="Indice Real Precio Viviendas (departamentos)"
       legendData={legendData}
+      dataLength={props.irpdData.length}
       onLegendClick={onLegendClick}
     >
       <LineChart data={buildData()}>
         {!hideSantiagoCentro &&
           <Line
           type="monotone"
+          name={legendData[0].title}
           dataKey={legendData[0].key}
           stroke={legendData[0].color}
           dot={false}/>
@@ -71,6 +73,7 @@ export default function IDPVAppartmentChart(props){
         {!hideNorPoniente &&
           <Line
           type="monotone"
+          name={legendData[1].title}
           dataKey={legendData[1].key}
           stroke={legendData[1].color}
           dot={false}/>
@@ -79,6 +82,7 @@ export default function IDPVAppartmentChart(props){
         {!hideNorOriente &&
           <Line
           type="monotone"
+          name={legendData[2].title}
           dataKey={legendData[2].key}
           stroke={legendData[2].color}
           dot={false}/>
@@ -87,6 +91,7 @@ export default function IDPVAppartmentChart(props){
         {!hideSur &&
           <Line
           type="monotone"
+          name={legendData[3].title}
           dataKey={legendData[3].key}
           stroke={legendData[3].color}
           dot={false}/>

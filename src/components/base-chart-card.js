@@ -1,17 +1,24 @@
 import React from 'react';
 
 import Typography from '@material-ui/core/Typography';
-import {useTheme } from '@material-ui/core/styles';
+import {useTheme, makeStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent'
 import {ResponsiveContainer} from 'recharts';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Dot from './dot';
 
+const useStyles = makeStyles(theme => ({
+  progress: {
+    margin: theme.spacing(2),
+  },
+}));
 
 export default function BaseChartCard(props){
   const theme = useTheme();
+  const classes = useStyles();
 
   const legendRender = props.legendData.map((data, index) => {
     return (
@@ -49,9 +56,15 @@ export default function BaseChartCard(props){
             </Grid>
           </Box>
         </Grid>
-        <ResponsiveContainer width="100%" height={350}>
-          {props.children}
-        </ResponsiveContainer>
+        {props.dataLength > 0 ? (
+          <ResponsiveContainer width="100%" height={350}>
+            {props.children}
+          </ResponsiveContainer>
+        ) : (
+          <Grid container justify="center" alignItems="center" style={{'height': '350px'}}>
+            <CircularProgress className={classes.progress} />
+          </Grid>
+        )}
       </CardContent>
     </Card>
   )

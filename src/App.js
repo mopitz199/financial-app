@@ -19,8 +19,9 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import InsertChart from '@material-ui/icons/InsertChart';
+import Toc from '@material-ui/icons/Toc';
+
 
 import Indicators from './pages/indicators';
 import Simulations from './pages/simulations';
@@ -93,13 +94,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const pages = ['Graficos', 'Simuladores']
+const pages = [
+  {'title': 'Graficos', 'icon': <InsertChart />},
+  {'title': 'Simuladores', 'icon': <Toc />},
+]
 
 export default function MiniDrawer() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [currentPage, setCurrentPage] = React.useState(pages[0]);
+  const [currentPage, setCurrentPage] = React.useState(pages[1]);
 
   const [irpdData, setIrpdData] = useState([])
   const [nationalOfferData, setNationalOfferData] = useState([])
@@ -141,7 +145,7 @@ export default function MiniDrawer() {
   }
 
   function renderCurrentPage(){
-    if(currentPage==="Graficos"){
+    if(currentPage.title==="Graficos"){
       return (
         <Indicators
           irpdData={irpdData}
@@ -205,15 +209,15 @@ export default function MiniDrawer() {
         </div>
         <Divider />
         <List>
-          {pages.map((text, index) => (
-            <ListItem button key={text} onClick={() => {setCurrentPage(text)}}>
+          {pages.map((page, index) => (
+            <ListItem button key={index} onClick={() => {setCurrentPage(page)}}>
               <MediaQuery minDeviceWidth={600}>
-                <ListItemIcon className={classes.listItemIcon}>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemIcon className={classes.listItemIcon}>{page.icon}</ListItemIcon>
               </MediaQuery>
               <MediaQuery maxDeviceWidth={599}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemIcon></ListItemIcon>
               </MediaQuery>
-              <ListItemText primary={text} />
+              <ListItemText primary={page.title} />
             </ListItem>
           ))}
         </List>

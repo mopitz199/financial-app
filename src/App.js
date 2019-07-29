@@ -157,7 +157,7 @@ export default function MiniDrawer() {
       )
     }else{
       return (
-        <Simulations />
+        <Simulations irpdData={irpdData} />
       )
     }
   }

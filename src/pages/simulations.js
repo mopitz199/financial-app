@@ -3,8 +3,10 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import SimulatorProfitabilityForm from '../components/simulador-rentabilidad-form';
 
+import {getAppreciationRate} from '../utils';
 
-export default function Simulations(){
+
+export default function Simulations(props){
 
   const [values, setValues] = React.useState({
     pie: null,
@@ -19,10 +21,16 @@ export default function Simulations(){
     setValues({ ...values, [name]: event.target.value });
   };
 
+  function genericInterestRate(){
+    let interestRates = getAppreciationRate(props.irpdData)
+    return interestRates['dpto_general']
+  }
+  
+
   return (
     <Grid>
       <Grid item lg={2}>
-        <SimulatorProfitabilityForm />
+        <SimulatorProfitabilityForm interestRate={genericInterestRate()}/>
       </Grid>
     </Grid>
   )

@@ -7,17 +7,25 @@ import Button from '@material-ui/core/Button';
 
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 import {cuandoPuedoVender2} from '../utils';
 
 const useStyles = makeStyles(theme => ({
   fullWidth: {
     width: '100%'
+  },
+  greenText:{
+    color: 'green'
+  },
+  redText:{
+    color: 'red'
   }
 }));
 
 
-export default function SimulatorProfitabilityForm(){
+export default function SimulatorProfitabilityForm(props){
 
   const classes = useStyles();
 
@@ -35,10 +43,18 @@ export default function SimulatorProfitabilityForm(){
   });
 
   const [open, setOpen] = React.useState(false)
-  const [calculate, setCalculate] = React.useState(false)
+  const [calculate, setCalculate] = React.useState(0)
 
   function onCalculate(){
-    let value = cuandoPuedoVender2(values.pie, values.valorDepartamento, values.valorArriendo, values.valorDividendo, values.compraAnios, values.calcularAnios)
+    let value = cuandoPuedoVender2(
+      parseFloat(values.pie),
+      parseFloat(props.interestRate/100),
+      parseFloat(values.valorDepartamento),
+      parseFloat(values.valorArriendo),
+      parseFloat(values.valorDividendo),
+      parseFloat(values.compraAnios),
+      parseFloat(values.calcularAnios))
+
     setCalculate(value)
     setOpen(true)
   }
@@ -46,8 +62,24 @@ export default function SimulatorProfitabilityForm(){
   function modal(){
     return (
       <Dialog onClose={() => setOpen(false)} aria-labelledby="simple-dialog-title" open={open}>
-        <DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>
-        {calculate}
+        <DialogTitle id="simple-dialog-title">Resultado</DialogTitle>
+        <DialogContent>
+          <Grid container alignItems="center" justify="center">
+            {calculate < 0 ? (
+              <DialogContentText>
+                Al cabo de {values.calcularAnios} años tendras una
+                <span className={classes.redText}> deuda </span>
+                de {Math.abs(parseInt(calculate))}
+              </DialogContentText>
+            ): (
+              <DialogContentText>
+                Al cabo de {values.calcularAnios} años tendras una
+                <span className={classes.greenText}> ganancia </span>
+                de {Math.abs(parseInt(calculate))}
+              </DialogContentText>
+            )}
+          </Grid>
+        </DialogContent>        
       </Dialog>
     )
   }

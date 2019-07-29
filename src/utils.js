@@ -37,3 +37,46 @@ export function cuandoPuedoVender2(pie, rentabilidad, valor_departamento, valor_
   }
   return ganancia-deuda
 }
+
+export function getAppreciationRate(irpdData){
+  let resp = {
+    'dpto_santiago_centro': 0,
+    'dpto_nor_poniente': 0,
+    'dpto_nor_oriente': 0,
+    'dpto_sur': 0,
+    'casa_nor_poniente': 0,
+    'casa_nor_oriente': 0,
+    'casa_sur': 0
+  }
+  let total_elements = 0
+  irpdData.map((e, index) => {
+    total_elements+=1
+    resp['casa_nor_poniente'] += e.data[10]
+    resp['casa_nor_oriente'] += e.data[11]
+    resp['casa_sur'] += e.data[12]
+    resp['dpto_santiago_centro'] += e.data[13]
+    resp['dpto_nor_poniente'] += e.data[14]
+    resp['dpto_nor_oriente'] += e.data[15]
+    resp['dpto_sur'] += e.data[16]
+  })
+
+  for(let attrName in resp){
+    if(resp.hasOwnProperty(attrName)){
+      if(total_elements!==0){
+        resp[attrName] = resp[attrName] / total_elements
+      }else{
+        resp[attrName] = '???'
+      }
+    }
+  }
+
+  if(total_elements!==0){
+    resp['casa_general'] = (resp['casa_nor_poniente'] + resp['casa_nor_oriente'] + resp['casa_sur']) / 3
+    resp['dpto_general'] = (resp['dpto_santiago_centro'] + resp['dpto_nor_oriente'] + resp['dpto_nor_oriente'] + resp['dpto_sur']) / 4
+  }else{
+    resp['casa_general'] = '???'
+    resp['dpto_general'] = '???'
+  }
+
+  return resp
+}

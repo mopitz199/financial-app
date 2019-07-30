@@ -157,7 +157,10 @@ export default function MiniDrawer() {
       )
     }else{
       return (
-        <Simulations irpdData={irpdData} />
+        <Simulations
+          irpdData={irpdData}
+          mortgageInterestRateData={mortgageInterestRateData}
+        />
       )
     }
   }

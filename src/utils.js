@@ -81,6 +81,11 @@ export function getAppreciationRate(irpdData){
   return resp
 }
 
+export function getCurrentMortgageRate(mortgageInterestRateData){
+  let lastIndex = mortgageInterestRateData.length-1
+  return Number(mortgageInterestRateData[lastIndex]['value'])
+}
+
 export function calculoDividendoBruto(tasaInteres, periodosAnios, montoCredito){
   var tasaInteresMensual = Math.pow((1+tasaInteres), (1/12))-1
   var periodosMeses = periodosAnios*12

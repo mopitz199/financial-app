@@ -80,3 +80,38 @@ export function getAppreciationRate(irpdData){
 
   return resp
 }
+
+export function calculoDividendoBruto(tasaInteres, periodosAnios, montoCredito){
+  var tasaInteresMensual = Math.pow((1+tasaInteres), (1/12))-1
+  var periodosMeses = periodosAnios*12
+  return montoCredito*tasaInteresMensual*(Math.pow((tasaInteresMensual+1),periodosMeses)/(Math.pow((tasaInteresMensual+1),periodosMeses)-1))
+}
+
+export function calculoDividendoFinal(tasaInteres, periodosAnios, montoCredito, valorDepartamento){
+  var periodosMeses = periodosAnios*12
+  let dividendoBruto = calculoDividendoBruto(tasaInteres, periodosAnios, montoCredito)
+  let seguroDegravamen = getSeguroDegravamen(dividendoBruto, periodosMeses, valorDepartamento)
+  let seguroIncendioSismo = getSeguroIncendioSismo(dividendoBruto, periodosMeses, valorDepartamento)
+  let costosOperacionales = 100
+  return dividendoBruto + (seguroDegravamen/periodosMeses) + (seguroIncendioSismo/periodosMeses) + (costosOperacionales/periodosMeses)
+}
+
+export function getSeguroDegravamen(dividendoBruto, periodos, valorDepartamento){
+  var deuda = valorDepartamento
+  var total = 0
+  for(var j=1; j<=periodos; j++){
+    deuda -= dividendoBruto
+    total += (deuda*0.00015)
+  }
+  return total
+}
+
+export function getSeguroIncendioSismo(dividendoBruto, periodos, valorDepartamento){
+  var deuda = valorDepartamento
+  var total = 0
+  for(var j=1; j<=periodos; j++){
+    deuda -= dividendoBruto
+    total += (deuda*0.0003)
+  }
+  return total
+}

@@ -87,9 +87,11 @@ export default function Simulations(props){
               mortgageInterestRateData={props.mortgageInterestRateData}
             />
           ) : (
-            <Grid container style={{'height': '350px', backgroundColor: theme.palette.common.white, borderColor: theme.palette.grey[300], borderWidth: '1px', borderStyle: 'solid'}} justify="center" alignItems="center">
-              <Typography>Una vez simulado el credito, aca mostraremos un grafico de como influye el dividendo dependiendo de la tasa de interes de los bancos.</Typography>
-            </Grid>
+            <Box p={2} style={{backgroundColor: theme.palette.common.white, borderColor: theme.palette.grey[300], borderWidth: '1px', borderStyle: 'solid'}}>
+              <Grid container style={{'height': '350px'}} justify="center" alignItems="center">
+                <Typography style={{textAlign: 'center'}}>Una vez simulado el credito, aca mostraremos un grafico de como influye el dividendo dependiendo de la tasa de interes de los bancos. Importante destacar que esta simulacion es referencial.</Typography>
+              </Grid>
+            </Box>
           )}
         </Grid>
       </Grid>

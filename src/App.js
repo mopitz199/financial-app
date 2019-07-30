@@ -103,7 +103,7 @@ export default function MiniDrawer() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [currentPage, setCurrentPage] = React.useState(pages[0]);
+  const [currentPage, setCurrentPage] = React.useState(pages[1]);
 
   const [irpdData, setIrpdData] = useState([])
   const [nationalOfferData, setNationalOfferData] = useState([])
@@ -215,7 +215,7 @@ export default function MiniDrawer() {
                 <ListItemIcon className={classes.listItemIcon}>{page.icon}</ListItemIcon>
               </MediaQuery>
               <MediaQuery maxDeviceWidth={599}>
-                <ListItemIcon></ListItemIcon>
+                <ListItemIcon>{page.icon}</ListItemIcon>
               </MediaQuery>
               <ListItemText primary={page.title} />
             </ListItem>

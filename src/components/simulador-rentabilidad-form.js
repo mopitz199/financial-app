@@ -1,9 +1,10 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
@@ -21,6 +22,10 @@ const useStyles = makeStyles(theme => ({
   },
   redText:{
     color: 'red'
+  },
+  importantText:{
+    fontSize: '1.1em',
+    fontWeight: '600'
   }
 }));
 
@@ -28,6 +33,7 @@ const useStyles = makeStyles(theme => ({
 export default function SimulatorProfitabilityForm(props){
 
   const classes = useStyles();
+  const theme = useTheme();
 
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value });
@@ -42,7 +48,7 @@ export default function SimulatorProfitabilityForm(props){
     calcularAnios: '',
   });
 
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(true)
   const [calculate, setCalculate] = React.useState(0)
 
   function onCalculate(){
@@ -62,23 +68,25 @@ export default function SimulatorProfitabilityForm(props){
   function modal(){
     return (
       <Dialog onClose={() => setOpen(false)} aria-labelledby="simple-dialog-title" open={open}>
-        <DialogTitle id="simple-dialog-title">Resultado</DialogTitle>
+        <DialogTitle id="simple-dialog-title" style={{backgroundColor: theme.palette.primary.main, color: theme.palette.common.white}}>Resultado</DialogTitle>
         <DialogContent>
-          <Grid container alignItems="center" justify="center">
-            {calculate < 0 ? (
-              <DialogContentText>
-                Al cabo de {values.calcularAnios} años tendras una
-                <span className={classes.redText}> deuda </span>
-                de {Math.abs(parseInt(calculate))}
-              </DialogContentText>
-            ): (
-              <DialogContentText>
-                Al cabo de {values.calcularAnios} años tendras una
-                <span className={classes.greenText}> ganancia </span>
-                de {Math.abs(parseInt(calculate))}
-              </DialogContentText>
-            )}
-          </Grid>
+          <Box pb={5} pt={5}>
+            <Grid container alignItems="center" justify="center">
+              {calculate < 0 ? (
+                <DialogContentText>
+                  Al cabo de {values.calcularAnios} años tendras una
+                  <span className={`${classes.importantText} ${classes.greenText}`}> deuda </span>
+                  de <span className={`${classes.importantText}`}>${Math.abs(parseInt(calculate))}</span>
+                </DialogContentText>
+              ): (
+                <DialogContentText>
+                  Al cabo de {values.calcularAnios} años tendras una
+                  <span className={`${classes.importantText} ${classes.greenText}`}> ganancia </span>
+                  de <span className={`${classes.importantText}`}>${Math.abs(parseInt(calculate))}</span>
+                </DialogContentText>
+              )}
+            </Grid>
+          </Box>
         </DialogContent>        
       </Dialog>
     )

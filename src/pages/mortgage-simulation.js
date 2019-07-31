@@ -3,10 +3,9 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import SimulatorProfitabilityForm from '../components/simulador-rentabilidad-form';
-import DividendWithInterestRateVariableChart from '../components/dividend-with-interest-rate-variable';
+import DividendWithInterestRateVariableChart from '../components/dividend-with-interest-rate-variable-chart';
 import SimulatorDividendForm from '../components/dividend-simulator-form';
-import {getAppreciationRate, calculoDividendoFinal, getCurrentMortgageRate} from '../utils';
+import {calculoDividendoFinal, getCurrentMortgageRate} from '../utils';
 
 const useStyles = makeStyles(theme => ({
   fullWidth: {
@@ -21,11 +20,25 @@ const useStyles = makeStyles(theme => ({
   importantText:{
     fontSize: '1.1em',
     fontWeight: '600'
+  },
+  resultBox:{
+    backgroundColor: "#3a8f3a",
+    color: theme.palette.common.white,
+    borderRadius: '5px'
+  },
+  chartContainerEmptyBox:{
+    backgroundColor: theme.palette.common.white,
+    borderColor: theme.palette.grey[300],
+    borderWidth: '1px',
+    borderStyle: 'solid'
+  },
+  chartEmptyBox:{
+    height: '350px'
   }
 }));
 
 
-export default function Simulations(props){
+export default function MortgageSimulation(props){
 
   const theme = useTheme();
   const classes = useStyles();
@@ -38,20 +51,9 @@ export default function Simulations(props){
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value });
   };
-
-  const onCalculate = () => {
-    console.log(values.valorDepartamento)
-    console.log(values.montoCredito)
-    console.log(values.anios)
-  }
-
-  function genericInterestRate(){
-    let interestRates = getAppreciationRate(props.irpdData)
-    return interestRates['dpto_general']
-  }
   
   function isValid(){
-    return values.valorDepartamento && values.montoCredito && values.anios
+    return values.valorDepartamento && values.montoCredito && values.anios && props.mortgageInterestRateData.length > 0
   }
 
   function calculateDividend(){
@@ -69,11 +71,10 @@ export default function Simulations(props){
         <Grid item lg={2}>
           <SimulatorDividendForm
             values={values}
-            onCalculate={onCalculate}
             handleChange={handleChange}
           />
           {isValid() &&
-            <Box mt={1} p={2} style={{backgroundColor: "#3a8f3a", color: theme.palette.common.white, borderRadius: '5px'}}>
+            <Box mt={1} p={2} className={classes.resultBox}>
               <Typography>El valor de su dividendo mensual sera de <span className={classes.importantText}>{calculateDividend()} UF</span></Typography>
             </Box>
           }
@@ -87,9 +88,13 @@ export default function Simulations(props){
               mortgageInterestRateData={props.mortgageInterestRateData}
             />
           ) : (
-            <Box p={2} style={{backgroundColor: theme.palette.common.white, borderColor: theme.palette.grey[300], borderWidth: '1px', borderStyle: 'solid'}}>
-              <Grid container style={{'height': '350px'}} justify="center" alignItems="center">
-                <Typography style={{textAlign: 'center'}}>Una vez simulado el credito, aca mostraremos un grafico de como influye el dividendo dependiendo de la tasa de interes de los bancos. Importante destacar que esta simulacion es referencial.</Typography>
+            <Box p={2} className={classes.chartContainerEmptyBox}>
+              <Grid container className={classes.chartEmptyBox} justify="center" alignItems="center">
+                <Typography style={{textAlign: 'center'}}>
+                  Una vez simulado el credito, aca mostraremos un grafico de como
+                  influye el dividendo dependiendo de la tasa de interes de los bancos.
+                  Importante destacar que esta simulacion es referencial.
+                </Typography>
               </Grid>
             </Box>
           )}

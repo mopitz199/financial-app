@@ -28,6 +28,11 @@ export function cuandoPuedoVender(pie, rentabilidad, valor_departamento, valor_a
   return mes-1
 }
 
+export function toMoney(number){
+  number = parseInt(number)
+  return `$${number.toLocaleString("es")}`
+}
+
 export function cuandoPuedoVender2(pie, rentabilidad, valor_departamento, valor_arriendo, dividendo, anios, anios2){
   var ganancia = valor_departamento
   var deuda = (dividendo*anios*12) + pie

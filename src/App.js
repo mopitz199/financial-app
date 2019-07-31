@@ -20,11 +20,13 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InsertChart from '@material-ui/icons/InsertChart';
-import Toc from '@material-ui/icons/Toc';
+import Home from '@material-ui/icons/Home';
+import AttachMoney from '@material-ui/icons/AttachMoney';
 
 
 import Indicators from './pages/indicators';
-import Simulations from './pages/simulations';
+import MortgageSimulation from './pages/mortgage-simulation';
+import ProfitabilitySimulation from './pages/profitability-simulation';
 
 
 const drawerWidth = 240;
@@ -96,14 +98,15 @@ const useStyles = makeStyles(theme => ({
 
 const pages = [
   {'title': 'Graficos', 'icon': <InsertChart />},
-  {'title': 'Simuladores', 'icon': <Toc />},
+  {'title': 'Credito hipotecario', 'icon': <Home />},
+  {'title': 'Rentabilidad', 'icon': <AttachMoney />},
 ]
 
 export default function MiniDrawer() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [currentPage, setCurrentPage] = React.useState(pages[1]);
+  const [currentPage, setCurrentPage] = React.useState(pages[2]);
 
   const [irpdData, setIrpdData] = useState([])
   const [nationalOfferData, setNationalOfferData] = useState([])
@@ -155,11 +158,17 @@ export default function MiniDrawer() {
           commercialInterestRateData={commercialInterestRateData}
         />
       )
-    }else{
+    }else if(currentPage.title==="Credito hipotecario"){
       return (
-        <Simulations
+        <MortgageSimulation
           irpdData={irpdData}
           mortgageInterestRateData={mortgageInterestRateData}
+        />
+      )
+    }else if(currentPage.title==="Rentabilidad"){
+      return (
+        <ProfitabilitySimulation
+          irpdData={irpdData}
         />
       )
     }

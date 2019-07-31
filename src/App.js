@@ -106,7 +106,7 @@ export default function MiniDrawer() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [currentPage, setCurrentPage] = React.useState(pages[2]);
+  const [currentPage, setCurrentPage] = React.useState(pages[0]);
 
   const [irpdData, setIrpdData] = useState([])
   const [nationalOfferData, setNationalOfferData] = useState([])

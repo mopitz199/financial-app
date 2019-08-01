@@ -1,28 +1,28 @@
-export function interesSimple(initial_value,  years, interest_rate){
-  return initial_value*(1+(years*interest_rate))
+export function simpleInterest(initialValue,  years, interestRate){
+  return initialValue*(1+(years*interestRate))
 }
 
-export function interesCompuesto(initial_value,  years, interest_rate){
-  return Math.pow((1+interest_rate), years)*initial_value
+export function compoundInterest(initialValue,  years, interestRate){
+  return Math.pow((1+interestRate), years)*initialValue
 }
 
-export function interesCompuestoAgregando(initial_value,  years, interest_rate, extra){
-  var total = initial_value
+export function compoundInterestByAdding(initialValue,  years, interestRate, extra){
+  var total = initialValue
   for(let i=1; i<=years; i++){
-      total = interesCompuesto(total, 1, interest_rate)
+      total = compoundInterest(total, 1, interestRate)
       total += extra
   }
   return total
 }
 
-export function cuandoPuedoVender(pie, rentabilidad, valor_departamento, valor_arriendo, dividendo, anios){
+export function whenIsProfitable(initialPayment, profitability, estateValue, rentValue, mortgageValue, debtYears){
   var mes = 1
-  var ganancia = valor_departamento
-  var deuda = (dividendo*anios*12) + pie
-  while(ganancia <= deuda){
+  var earnings = estateValue
+  var debt = (mortgageValue*debtYears*12) + initialPayment
+  while(earnings <= debt){
       let years = mes/12
-      ganancia = interesSimple(valor_departamento, years, rentabilidad)
-      deuda -= valor_arriendo
+      earnings = simpleInterest(estateValue, years, profitability)
+      debt -= rentValue
       mes += 1
   }
   return mes-1
@@ -33,14 +33,14 @@ export function toMoney(number){
   return `$${number.toLocaleString("es")}`
 }
 
-export function cuandoPuedoVender2(pie, rentabilidad, valor_departamento, valor_arriendo, dividendo, anios, anios2){
-  var ganancia = valor_departamento
-  var deuda = (dividendo*anios*12) + pie
-  for(let year=1; year<=anios2; year++){
-      ganancia = interesSimple(valor_departamento, year, rentabilidad)
-      deuda -= (valor_arriendo*12)
+export function pofitabilityAfterYears(initialPayment, profitability, estateValue, rentValue, mortgageValue, debtYears, yearOfCalculation){
+  var earnings = estateValue
+  var debt = (mortgageValue*debtYears*12) + initialPayment
+  for(let year=1; year<=yearOfCalculation; year++){
+      earnings = simpleInterest(estateValue, year, profitability)
+      debt -= (rentValue*12)
   }
-  return ganancia-deuda
+  return earnings-debt
 }
 
 export function getAppreciationRate(irpdData){
@@ -91,37 +91,37 @@ export function getCurrentMortgageRate(mortgageInterestRateData){
   return Number(mortgageInterestRateData[lastIndex]['value'])
 }
 
-export function calculoDividendoBruto(tasaInteres, periodosAnios, montoCredito){
-  var tasaInteresMensual = Math.pow((1+tasaInteres), (1/12))-1
-  var periodosMeses = periodosAnios*12
-  return montoCredito*tasaInteresMensual*(Math.pow((tasaInteresMensual+1),periodosMeses)/(Math.pow((tasaInteresMensual+1),periodosMeses)-1))
+export function calculatePartialMortgage(interestRate, yearPeriod, mortgageCreditValue){
+  var monthlyInterestRate = Math.pow((1+interestRate), (1/12))-1
+  var monthPeriod = yearPeriod*12
+  return mortgageCreditValue*monthlyInterestRate*(Math.pow((monthlyInterestRate+1),monthPeriod)/(Math.pow((monthlyInterestRate+1),monthPeriod)-1))
 }
 
-export function calculoDividendoFinal(tasaInteres, periodosAnios, montoCredito, valorDepartamento){
-  var periodosMeses = periodosAnios*12
-  let dividendoBruto = calculoDividendoBruto(tasaInteres, periodosAnios, montoCredito)
-  let seguroDegravamen = getSeguroDegravamen(dividendoBruto, periodosMeses, valorDepartamento)
-  let seguroIncendioSismo = getSeguroIncendioSismo(dividendoBruto, periodosMeses, valorDepartamento)
-  let costosOperacionales = 100
-  return dividendoBruto + (seguroDegravamen/periodosMeses) + (seguroIncendioSismo/periodosMeses) + (costosOperacionales/periodosMeses)
+export function calculateFinalMortgage(interestRate, yearPeriod, mortgageCreditValue, estateValue){
+  var monthPeriod = yearPeriod*12
+  let partialMortgageValue = calculatePartialMortgage(interestRate, yearPeriod, mortgageCreditValue)
+  let reliefInsurance = getReliefInsurance(partialMortgageValue, monthPeriod, estateValue)
+  let fireEarthquakeInsurance = getFireEarthquakeInsurance(partialMortgageValue, monthPeriod, estateValue)
+  let operationalCosts = 100
+  return partialMortgageValue + (reliefInsurance/monthPeriod) + (fireEarthquakeInsurance/monthPeriod) + (operationalCosts/monthPeriod)
 }
 
-export function getSeguroDegravamen(dividendoBruto, periodos, valorDepartamento){
-  var deuda = valorDepartamento
+export function getReliefInsurance(partialMortgageValue, periods, estateValue){
+  var debt = estateValue
   var total = 0
-  for(var j=1; j<=periodos; j++){
-    deuda -= dividendoBruto
-    total += (deuda*0.00015)
+  for(var j=1; j<=periods; j++){
+    debt -= partialMortgageValue
+    total += (debt*0.00015)
   }
   return total
 }
 
-export function getSeguroIncendioSismo(dividendoBruto, periodos, valorDepartamento){
-  var deuda = valorDepartamento
+export function getFireEarthquakeInsurance(partialMortgageValue, periods, estateValue){
+  var debt = estateValue
   var total = 0
-  for(var j=1; j<=periodos; j++){
-    deuda -= dividendoBruto
-    total += (deuda*0.0003)
+  for(var j=1; j<=periods; j++){
+    debt -= partialMortgageValue
+    total += (debt*0.0003)
   }
   return total
 }

@@ -11,7 +11,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
-import {cuandoPuedoVender2} from '../utils';
+import {pofitabilityAfterYears} from '../utils';
 
 const useStyles = makeStyles(theme => ({
   fullWidth: {
@@ -37,7 +37,7 @@ export default function SimulatorProfitabilityForm(props){
 
   return (
     <Grid container>
-      <Typography variant="h5">Simluador rentabilidad</Typography>
+      <Typography variant="h5">Simluador profitability</Typography>
       <TextField
         id="outlined-name"
         className={classes.fullWidth}
@@ -51,8 +51,8 @@ export default function SimulatorProfitabilityForm(props){
         id="outlined-name"
         className={classes.fullWidth}
         label="Valor departamento(UF)"
-        value={props.values.valorDepartamento}
-        onChange={props.handleChange('valorDepartamento')}
+        value={props.values.estateValue}
+        onChange={props.handleChange('estateValue')}
         margin="normal"
         variant="outlined"
       />
@@ -68,7 +68,7 @@ export default function SimulatorProfitabilityForm(props){
       <TextField
         id="outlined-name"
         className={classes.fullWidth}
-        label="Valor dividendo(UF)"
+        label="Valor mortgageValue(UF)"
         value={props.values.valorDividendo}
         onChange={props.handleChange('valorDividendo')}
         margin="normal"

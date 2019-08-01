@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import DividendWithInterestRateVariableChart from '../components/dividend-with-interest-rate-variable-chart';
 import SimulatorDividendForm from '../components/dividend-simulator-form';
-import {calculoDividendoFinal, getCurrentMortgageRate} from '../utils';
+import {calculateFinalMortgage, getCurrentMortgageRate} from '../utils';
 
 const useStyles = makeStyles(theme => ({
   fullWidth: {
@@ -43,9 +43,9 @@ export default function MortgageSimulation(props){
   const theme = useTheme();
   const classes = useStyles();
   const [values, setValues] = React.useState({
-    valorDepartamento: '',
-    montoCredito: '',
-    anios: '',
+    estateValue: '',
+    mortgageCreditValue: '',
+    debtYears: '',
   });
 
   const handleChange = name => event => {
@@ -53,15 +53,15 @@ export default function MortgageSimulation(props){
   };
   
   function isValid(){
-    return values.valorDepartamento && values.montoCredito && values.anios && props.mortgageInterestRateData.length > 0
+    return values.estateValue && values.mortgageCreditValue && values.debtYears && props.mortgageInterestRateData.length > 0
   }
 
   function calculateDividend(){
-    let dividend = calculoDividendoFinal(
+    let dividend = calculateFinalMortgage(
       (getCurrentMortgageRate(props.mortgageInterestRateData)/100),
-      values.anios,
-      values.montoCredito,
-      values.valorDepartamento)
+      values.debtYears,
+      values.mortgageCreditValue,
+      values.estateValue)
     return Number(dividend.toFixed(2))
   }
 
@@ -75,16 +75,16 @@ export default function MortgageSimulation(props){
           />
           {isValid() &&
             <Box mt={1} p={2} className={classes.resultBox}>
-              <Typography>El valor de su dividendo mensual sera de <span className={classes.importantText}>{calculateDividend()} UF</span></Typography>
+              <Typography>El valor de su mortgageValue mensual sera de <span className={classes.importantText}>{calculateDividend()} UF</span></Typography>
             </Box>
           }
         </Grid>
         <Grid item lg={10}>
           {isValid() ? (
             <DividendWithInterestRateVariableChart
-              valorDepartamento={values.valorDepartamento}
-              montoCredito={values.montoCredito}
-              anios={values.anios}
+              estateValue={values.estateValue}
+              mortgageCreditValue={values.mortgageCreditValue}
+              debtYears={values.debtYears}
               mortgageInterestRateData={props.mortgageInterestRateData}
             />
           ) : (

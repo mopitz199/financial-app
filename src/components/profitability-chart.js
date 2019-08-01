@@ -6,7 +6,7 @@ import {
 
 import BaseChartCard from './base-chart-card';
 
-import {cuandoPuedoVender2, toMoney} from '../utils';
+import {pofitabilityAfterYears, toMoney} from '../utils';
 
 export default function ProfitabilityChart(props){
 
@@ -15,10 +15,10 @@ export default function ProfitabilityChart(props){
     for(let year=1; year<=props.compraAnios; year++){
       resp.push({
         'name': `${year}`,
-        'rentabilidad': parseInt(cuandoPuedoVender2(
+        'profitability': parseInt(pofitabilityAfterYears(
           Number(props.pie),
-          Number(props.rentabilidad),
-          Number(props.valorDepartamento),
+          Number(props.profitability),
+          Number(props.estateValue),
           Number(props.valorArriendo),
           Number(props.valorDividendo),
           Number(props.compraAnios),
@@ -29,7 +29,7 @@ export default function ProfitabilityChart(props){
   }
 
   const legendData = [
-    {'key': 'rentabilidad', 'color': 'red', 'title': 'Rentabilidad'}
+    {'key': 'profitability', 'color': 'red', 'title': 'Rentabilidad'}
   ]
 
   return(

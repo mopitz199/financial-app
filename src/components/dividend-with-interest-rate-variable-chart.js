@@ -6,7 +6,7 @@ import {
 
 import BaseChartCard from './base-chart-card';
 
-import {calculoDividendoFinal} from '../utils';
+import {calculateFinalMortgage} from '../utils';
 
 export default function DividendWithInterestRateVariableChart(props){
 
@@ -15,11 +15,11 @@ export default function DividendWithInterestRateVariableChart(props){
     props.mortgageInterestRateData.forEach(element => {
       resp.push({
         'name': `${element['name'].split(".")[1]}`.slice(-2),
-        'dividendo': Number(calculoDividendoFinal(
+        'mortgageValue': Number(calculateFinalMortgage(
           (element['value']/100),
-          props.anios,
-          props.montoCredito,
-          props.valorDepartamento).toFixed(2)),
+          props.debtYears,
+          props.mortgageCreditValue,
+          props.estateValue).toFixed(2)),
         'tasa_interes': Number(element['value'])
       })
     })
@@ -27,7 +27,7 @@ export default function DividendWithInterestRateVariableChart(props){
   }
 
   const legendData = [
-    {'key': 'dividendo', 'color': 'red', 'title': 'Dividendo'},
+    {'key': 'mortgageValue', 'color': 'red', 'title': 'Dividendo'},
     {'key': 'tasa_interes', 'color': 'green', 'title': 'Tasa interes'},
   ]
 

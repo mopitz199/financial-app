@@ -3,10 +3,9 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import DividendWithInterestRateVariableChart from '../components/dividend-with-interest-rate-variable-chart';
 import ProfitabilityChart from '../components/profitability-chart';
-import SimulatorProfitabilityForm from '../components/simulador-rentabilidad-form';
-import {calculoDividendoFinal, getCurrentMortgageRate, getAppreciationRate, cuandoPuedoVender} from '../utils';
+import SimulatorProfitabilityForm from '../components/simulate-profitability-form';
+import {calculateFinalMortgage, getCurrentMortgageRate, getAppreciationRate, whenIsProfitable} from '../utils';
 
 const useStyles = makeStyles(theme => ({
   fullWidth: {
@@ -45,7 +44,7 @@ export default function ProfitabilitySimulation(props){
   const classes = useStyles();
   const [values, setValues] = React.useState({
     pie: '',
-    valorDepartamento: '',
+    estateValue: '',
     valorArriendo: '',
     valorDividendo: '',
     compraAnios: '',
@@ -56,14 +55,14 @@ export default function ProfitabilitySimulation(props){
   };
   
   function isValid(){
-    return values.pie && values.valorDividendo && values.compraAnios && values.valorDepartamento && values.valorArriendo && props.irpdData
+    return values.pie && values.valorDividendo && values.compraAnios && values.estateValue && values.valorArriendo && props.irpdData
   }
 
   function cuandoVender(){
-    let mes = cuandoPuedoVender(
+    let mes = whenIsProfitable(
       Number(values.pie),
       Number((getRentabilidad()/100)),
-      Number(values.valorDepartamento),
+      Number(values.estateValue),
       Number(values.valorArriendo),
       Number(values.valorDividendo),
       Number(values.compraAnios))
@@ -93,19 +92,17 @@ export default function ProfitabilitySimulation(props){
           {isValid() ? (
             <ProfitabilityChart
               pie={values.pie}
-              valorDepartamento={values.valorDepartamento}
+              estateValue={values.estateValue}
               valorArriendo={values.valorArriendo}
               valorDividendo={values.valorDividendo}
               compraAnios={values.compraAnios}
-              rentabilidad={getRentabilidad()/100}
+              profitability={getRentabilidad()/100}
             />
           ) : (
             <Box p={2} className={classes.chartContainerEmptyBox}>
               <Grid container className={classes.chartEmptyBox} justify="center" alignItems="center">
                 <Typography style={{textAlign: 'center'}}>
-                  Una vez simulado el credito, aca mostraremos un grafico de como
-                  influye el dividendo dependiendo de la tasa de interes de los bancos.
-                  Importante destacar que esta simulacion es referencial.
+                  Una vez simulada la rentabilidad, se mostrara un grafico que indica cual es la rentabilidad del inbueble con el pasar de los años
                 </Typography>
               </Grid>
             </Box>

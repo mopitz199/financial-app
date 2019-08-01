@@ -33,8 +33,8 @@ export default function SimulatorDividendForm(props){
         id="outlined-name"
         className={classes.fullWidth}
         label="Valor departamento(UF)"
-        value={props.values.valorDepartamento}
-        onChange={props.handleChange('valorDepartamento')}
+        value={props.values.estateValue}
+        onChange={props.handleChange('estateValue')}
         margin="normal"
         variant="outlined"
       />
@@ -42,8 +42,8 @@ export default function SimulatorDividendForm(props){
         id="outlined-name"
         className={classes.fullWidth}
         label="Monto credito(UF)"
-        value={props.values.montoCredito}
-        onChange={props.handleChange('montoCredito')}
+        value={props.values.mortgageCreditValue}
+        onChange={props.handleChange('mortgageCreditValue')}
         margin="normal"
         variant="outlined"
       />
@@ -51,8 +51,8 @@ export default function SimulatorDividendForm(props){
         id="outlined-name"
         className={classes.fullWidth}
         label="Compra a cuantos años"
-        value={props.values.anios}
-        onChange={props.handleChange('anios')}
+        value={props.values.debtYears}
+        onChange={props.handleChange('debtYears')}
         margin="normal"
         variant="outlined"
       />

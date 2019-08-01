@@ -6,7 +6,7 @@ import {
 
 import BaseChartCard from './base-chart-card';
 
-import {pofitabilityAfterYears, toMoney} from '../utils';
+import {pofitabilityAfterYears, toMoney} from '../../utils';
 
 export default function ProfitabilityChart(props){
 

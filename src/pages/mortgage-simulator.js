@@ -3,9 +3,9 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import ProfitabilityChart from '../components/profitability-chart';
-import SimulatorProfitabilityForm from '../components/simulate-profitability-form';
-import {calculateFinalMortgage, getCurrentMortgageRate, getAppreciationRate, whenIsProfitable} from '../utils';
+import DividendWithInterestRateVariableChart from '../components/charts/dividend-with-interest-rate-variable-chart';
+import SimulatorDividendForm from '../components/dividend-simulator-form';
+import {calculateFinalMortgage, getCurrentMortgageRate} from '../utils';
 
 const useStyles = makeStyles(theme => ({
   fullWidth: {
@@ -38,16 +38,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function ProfitabilitySimulation(props){
+export default function MortgageSimulation(props){
 
   const theme = useTheme();
   const classes = useStyles();
   const [values, setValues] = React.useState({
-    pie: '',
     estateValue: '',
-    rentValue: '',
-    mortgageValue: '',
-    yearsOfDebt: '',
+    mortgageCreditValue: '',
+    debtYears: '',
   });
 
   const handleChange = name => event => {
@@ -55,54 +53,47 @@ export default function ProfitabilitySimulation(props){
   };
   
   function isValid(){
-    return values.pie && values.mortgageValue && values.yearsOfDebt && values.estateValue && values.rentValue && props.irpdData
+    return values.estateValue && values.mortgageCreditValue && values.debtYears && props.mortgageInterestRateData.length > 0
   }
 
-  function cuandoVender(){
-    let mes = whenIsProfitable(
-      Number(values.pie),
-      Number((getRentabilidad()/100)),
-      Number(values.estateValue),
-      Number(values.rentValue),
-      Number(values.mortgageValue),
-      Number(values.yearsOfDebt))
-    return Number(mes)
-  }
-
-  function getRentabilidad(){
-    let data = getAppreciationRate(props.irpdData)
-    return data['dpto_general']
+  function calculateDividend(){
+    let dividend = calculateFinalMortgage(
+      (getCurrentMortgageRate(props.mortgageInterestRateData)/100),
+      values.debtYears,
+      values.mortgageCreditValue,
+      values.estateValue)
+    return Number(dividend.toFixed(2))
   }
 
   return (
     <Grid container justify="center">
       <Grid container spacing={3}>
         <Grid item lg={2}>
-          <SimulatorProfitabilityForm
+          <SimulatorDividendForm
             values={values}
             handleChange={handleChange}
           />
           {isValid() &&
             <Box mt={1} p={2} className={classes.resultBox}>
-              <Typography>Su inmueble sera rentable al mes <span className={classes.importantText}>{cuandoVender()}</span></Typography>
+              <Typography>El valor de su mortgageValue mensual sera de <span className={classes.importantText}>{calculateDividend()} UF</span></Typography>
             </Box>
           }
         </Grid>
         <Grid item lg={10}>
           {isValid() ? (
-            <ProfitabilityChart
-              pie={values.pie}
+            <DividendWithInterestRateVariableChart
               estateValue={values.estateValue}
-              rentValue={values.rentValue}
-              mortgageValue={values.mortgageValue}
-              yearsOfDebt={values.yearsOfDebt}
-              profitability={getRentabilidad()/100}
+              mortgageCreditValue={values.mortgageCreditValue}
+              debtYears={values.debtYears}
+              mortgageInterestRateData={props.mortgageInterestRateData}
             />
           ) : (
             <Box p={2} className={classes.chartContainerEmptyBox}>
               <Grid container className={classes.chartEmptyBox} justify="center" alignItems="center">
                 <Typography style={{textAlign: 'center'}}>
-                  Una vez simulada la rentabilidad, se mostrara un grafico que indica cual es la rentabilidad del inbueble con el pasar de los años
+                  Una vez simulado el credito, aca mostraremos un grafico de como
+                  influye el dividendo dependiendo de la tasa de interes de los bancos.
+                  Importante destacar que esta simulacion es referencial.
                 </Typography>
               </Grid>
             </Box>

@@ -37,7 +37,7 @@ export default function SimulatorProfitabilityForm(props){
 
   return (
     <Grid container>
-      <Typography variant="h5">Simluador profitability</Typography>
+      <Typography variant="h5">Simluador rentabilidad</Typography>
       <TextField
         id="outlined-name"
         className={classes.fullWidth}
@@ -60,15 +60,15 @@ export default function SimulatorProfitabilityForm(props){
         id="outlined-name"
         className={classes.fullWidth}
         label="Valor arriendo(UF)"
-        value={props.values.rentValue}
-        onChange={props.handleChange('rentValue')}
+        value={props.values.mortgageValue}
+        onChange={props.handleChange('mortgageValue')}
         margin="normal"
         variant="outlined"
       />
       <TextField
         id="outlined-name"
         className={classes.fullWidth}
-        label="Valor mortgageValue(UF)"
+        label="Valor dividendo(UF)"
         value={props.values.mortgageValue}
         onChange={props.handleChange('mortgageValue')}
         margin="normal"

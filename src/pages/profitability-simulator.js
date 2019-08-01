@@ -3,8 +3,8 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import ProfitabilityChart from '../components/profitability-chart';
-import SimulatorProfitabilityForm from '../components/simulate-profitability-form';
+import ProfitabilityChart from '../components/charts/profitability-chart';
+import SimulatorProfitabilityForm from '../components/profitability-simulator-form';
 import {calculateFinalMortgage, getCurrentMortgageRate, getAppreciationRate, whenIsProfitable} from '../utils';
 
 const useStyles = makeStyles(theme => ({
@@ -45,7 +45,7 @@ export default function ProfitabilitySimulation(props){
   const [values, setValues] = React.useState({
     pie: '',
     estateValue: '',
-    rentValue: '',
+    mortgageValue: '',
     mortgageValue: '',
     yearsOfDebt: '',
   });
@@ -55,7 +55,7 @@ export default function ProfitabilitySimulation(props){
   };
   
   function isValid(){
-    return values.pie && values.mortgageValue && values.yearsOfDebt && values.estateValue && values.rentValue && props.irpdData
+    return values.pie && values.mortgageValue && values.yearsOfDebt && values.estateValue && values.mortgageValue && props.irpdData
   }
 
   function cuandoVender(){
@@ -63,7 +63,7 @@ export default function ProfitabilitySimulation(props){
       Number(values.pie),
       Number((getRentabilidad()/100)),
       Number(values.estateValue),
-      Number(values.rentValue),
+      Number(values.mortgageValue),
       Number(values.mortgageValue),
       Number(values.yearsOfDebt))
     return Number(mes)
@@ -93,7 +93,7 @@ export default function ProfitabilitySimulation(props){
             <ProfitabilityChart
               pie={values.pie}
               estateValue={values.estateValue}
-              rentValue={values.rentValue}
+              mortgageValue={values.mortgageValue}
               mortgageValue={values.mortgageValue}
               yearsOfDebt={values.yearsOfDebt}
               profitability={getRentabilidad()/100}

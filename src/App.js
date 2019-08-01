@@ -25,8 +25,8 @@ import AttachMoney from '@material-ui/icons/AttachMoney';
 
 
 import Indicators from './pages/indicators';
-import MortgageSimulation from './pages/mortgage-simulation';
-import ProfitabilitySimulation from './pages/profitability-simulation';
+import MortgageSimulation from './pages/mortgage-simulator';
+import ProfitabilitySimulation from './pages/profitability-simulator';
 
 
 const drawerWidth = 240;

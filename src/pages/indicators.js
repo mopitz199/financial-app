@@ -2,7 +2,7 @@ import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
 
-import DataCard1 from '../components/data-card-1';
+import DataCard1 from '../components/data-card';
 import IDPVAppartmentChart from '../components/charts/irpv-appartment-chart';
 import IDPVHouseChart from '../components/charts/irpv-house-chart';
 import SuppyDemandChart from '../components/charts/suppy-demand-chart';

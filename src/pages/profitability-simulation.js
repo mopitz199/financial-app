@@ -3,9 +3,9 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import ProfitabilityChart from '../components/profitability-chart';
+import ProfitabilityChart from '../components/charts/profitability-chart';
 import SimulatorProfitabilityForm from '../components/simulate-profitability-form';
-import {calculateFinalMortgage, getCurrentMortgageRate, getAppreciationRate, whenIsProfitable} from '../utils';
+import {getAppreciationRate, whenIsProfitable} from '../utils';
 
 const useStyles = makeStyles(theme => ({
   fullWidth: {

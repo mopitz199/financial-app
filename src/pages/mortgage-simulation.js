@@ -3,7 +3,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import DividendWithInterestRateVariableChart from '../components/dividend-with-interest-rate-variable-chart';
+import DividendWithInterestRateVariableChart from '../components/charts/dividend-with-interest-rate-variable-chart';
 import SimulatorDividendForm from '../components/dividend-simulator-form';
 import {calculateFinalMortgage, getCurrentMortgageRate} from '../utils';
 

@@ -3,10 +3,10 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 
 import DataCard1 from '../components/data-card-1';
-import IDPVAppartmentChart from '../components/irpv-appartment-chart';
-import IDPVHouseChart from '../components/irpv-house-chart';
-import SuppyDemandChart from '../components/suppy-demand-chart';
-import InterestRateChart from '../components/interest-rate-chart';
+import IDPVAppartmentChart from '../components/charts/irpv-appartment-chart';
+import IDPVHouseChart from '../components/charts/irpv-house-chart';
+import SuppyDemandChart from '../components/charts/suppy-demand-chart';
+import InterestRateChart from '../components/charts/interest-rate-chart';
 
 import { useTheme } from '@material-ui/core/styles';
 

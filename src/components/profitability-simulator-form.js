@@ -60,8 +60,8 @@ export default function SimulatorProfitabilityForm(props){
         id="outlined-name"
         className={classes.fullWidth}
         label="Valor arriendo(UF)"
-        value={props.values.mortgageValue}
-        onChange={props.handleChange('mortgageValue')}
+        value={props.values.rentValue}
+        onChange={props.handleChange('rentValue')}
         margin="normal"
         variant="outlined"
       />

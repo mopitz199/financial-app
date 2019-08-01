@@ -45,7 +45,7 @@ export default function ProfitabilitySimulation(props){
   const [values, setValues] = React.useState({
     pie: '',
     estateValue: '',
-    mortgageValue: '',
+    rentValue: '',
     mortgageValue: '',
     yearsOfDebt: '',
   });
@@ -55,7 +55,7 @@ export default function ProfitabilitySimulation(props){
   };
   
   function isValid(){
-    return values.pie && values.mortgageValue && values.yearsOfDebt && values.estateValue && values.mortgageValue && props.irpdData
+    return values.pie && values.mortgageValue && values.yearsOfDebt && values.estateValue && values.rentValue && props.irpdData
   }
 
   function cuandoVender(){
@@ -63,7 +63,7 @@ export default function ProfitabilitySimulation(props){
       Number(values.pie),
       Number((getRentabilidad()/100)),
       Number(values.estateValue),
-      Number(values.mortgageValue),
+      Number(values.rentValue),
       Number(values.mortgageValue),
       Number(values.yearsOfDebt))
     return Number(mes)
@@ -93,7 +93,7 @@ export default function ProfitabilitySimulation(props){
             <ProfitabilityChart
               pie={values.pie}
               estateValue={values.estateValue}
-              mortgageValue={values.mortgageValue}
+              rentValue={values.rentValue}
               mortgageValue={values.mortgageValue}
               yearsOfDebt={values.yearsOfDebt}
               profitability={getRentabilidad()/100}

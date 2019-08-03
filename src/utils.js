@@ -33,14 +33,18 @@ export function toMoney(number){
   return `$${number.toLocaleString("es")}`
 }
 
-export function pofitabilityAfterYears(initialPayment, profitability, estateValue, rentValue, mortgageValue, debtYears, yearOfCalculation){
-  var earnings = estateValue
+export function earningsAfterYears(initialPayment, profitability, estateValue, rentValue, mortgageValue, debtYears, yearOfCalculation){
+  var active = estateValue
   var debt = (mortgageValue*debtYears*12) + initialPayment
   for(let year=1; year<=yearOfCalculation; year++){
-      earnings = simpleInterest(estateValue, year, profitability)
+      active = simpleInterest(estateValue, year, profitability)
       debt -= (rentValue*12)
   }
-  return earnings-debt
+  return {
+    'active': Number(active.toFixed(2)),
+    'debt': Number(debt.toFixed(2)),
+    'earning': Number((active-debt).toFixed(2))
+  }
 }
 
 export function getAppreciationRate(irpdData){

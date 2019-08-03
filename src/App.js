@@ -4,7 +4,8 @@ import './App.css';
 import MediaQuery from 'react-responsive';
 
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles, useTheme, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -104,7 +105,15 @@ const pages = [
 
 export default function MiniDrawer() {
   const classes = useStyles();
-  const theme = useTheme();
+  const theme = createMuiTheme({
+    'palette': {
+      green: {
+        600: '#43a047',
+        700: '#388e3c',
+      },
+    }
+  });
+
   const [open, setOpen] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(pages[0]);
 
@@ -175,69 +184,71 @@ export default function MiniDrawer() {
   }
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="Open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: open,
-            })}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Financial dashboard
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        })}
-        classes={{
-          paper: clsx({
+    <ThemeProvider theme={theme}>
+      <div className={classes.root}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          className={clsx(classes.appBar, {
+            [classes.appBarShift]: open,
+          })}
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="Open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, {
+                [classes.hide]: open,
+              })}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap>
+              Financial dashboard
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          className={clsx(classes.drawer, {
             [classes.drawerOpen]: open,
             [classes.drawerClose]: !open,
-          }),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          {pages.map((page, index) => (
-            <ListItem button key={index} onClick={() => {setCurrentPage(page)}}>
-              <MediaQuery minDeviceWidth={600}>
-                <ListItemIcon className={classes.listItemIcon}>{page.icon}</ListItemIcon>
-              </MediaQuery>
-              <MediaQuery maxDeviceWidth={599}>
-                <ListItemIcon>{page.icon}</ListItemIcon>
-              </MediaQuery>
-              <ListItemText primary={page.title} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        {renderCurrentPage()}
-      </main>
-    </div>
+          })}
+          classes={{
+            paper: clsx({
+              [classes.drawerOpen]: open,
+              [classes.drawerClose]: !open,
+            }),
+          }}
+          open={open}
+        >
+          <div className={classes.toolbar}>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </IconButton>
+          </div>
+          <Divider />
+          <List>
+            {pages.map((page, index) => (
+              <ListItem button key={index} onClick={() => {setCurrentPage(page)}}>
+                <MediaQuery minDeviceWidth={600}>
+                  <ListItemIcon className={classes.listItemIcon}>{page.icon}</ListItemIcon>
+                </MediaQuery>
+                <MediaQuery maxDeviceWidth={599}>
+                  <ListItemIcon>{page.icon}</ListItemIcon>
+                </MediaQuery>
+                <ListItemText primary={page.title} />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          {renderCurrentPage()}
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }

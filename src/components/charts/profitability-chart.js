@@ -6,30 +6,36 @@ import {
 
 import BaseChartCard from './base-chart-card';
 
-import {pofitabilityAfterYears, toMoney} from '../../utils';
+import {earningsAfterYears, toMoney} from '../../utils';
 
 export default function ProfitabilityChart(props){
 
   function buildData(){
     var resp = []
     for(let year=1; year<=props.yearsOfDebt; year++){
+      let result = earningsAfterYears(
+        Number(props.pie),
+        Number(props.profitability),
+        Number(props.estateValue),
+        Number(props.rentValue),
+        Number(props.mortgageValue),
+        Number(props.yearsOfDebt),
+        year)
+
       resp.push({
         'name': `${year}`,
-        'profitability': parseInt(pofitabilityAfterYears(
-          Number(props.pie),
-          Number(props.profitability),
-          Number(props.estateValue),
-          Number(props.rentValue),
-          Number(props.mortgageValue),
-          Number(props.yearsOfDebt),
-          year))
+        'debt': result['debt'],
+        'active': result['active'],
+        'earning': result['earning']
       })
     }
     return resp
   }
 
   const legendData = [
-    {'key': 'profitability', 'color': 'red', 'title': 'Rentabilidad'}
+    {'key': 'debt', 'color': 'red', 'title': 'Deuda'},
+    {'key': 'active', 'color': 'blue', 'title': 'Activo'},
+    {'key': 'earning', 'color': 'green', 'title': 'Ganancia'}
   ]
 
   return(
@@ -46,6 +52,20 @@ export default function ProfitabilityChart(props){
           name={legendData[0].title}
           dataKey={legendData[0].key}
           stroke={legendData[0].color}
+          dot={false}/>
+
+        <Line
+          type="monotone"
+          name={legendData[1].title}
+          dataKey={legendData[1].key}
+          stroke={legendData[1].color}
+          dot={false}/>
+
+        <Line
+          type="monotone"
+          name={legendData[2].title}
+          dataKey={legendData[2].key}
+          stroke={legendData[2].color}
           dot={false}/>
 
         <XAxis dataKey="name"/>

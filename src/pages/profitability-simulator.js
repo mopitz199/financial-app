@@ -1,17 +1,14 @@
 import React from 'react';
-import { makeStyles, useTheme, createMuiTheme } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import ProfitabilityChart from '../components/charts/profitability-chart';
 import SimulatorProfitabilityForm from '../components/profitability-simulator-form';
-import {calculateFinalMortgage, getCurrentMortgageRate, getAppreciationRate, whenIsProfitable} from '../utils';
-import { thisExpression } from '@babel/types';
+import {getAppreciationRate, whenIsProfitable} from '../utils';
 
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
+import ExplainedDialog from '../components/explained-dialog';
+import ExplainedButton from '../components/explained-button';
 
 const useStyles = makeStyles(theme => ({
   fullWidth: {
@@ -28,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     fontWeight: '600'
   },
   resultBox:{
-    backgroundColor: "#3a8f3a",
+    backgroundColor: theme.palette.green[600],
     color: theme.palette.common.white,
     borderRadius: '5px'
   },
@@ -40,14 +37,6 @@ const useStyles = makeStyles(theme => ({
   },
   chartEmptyBox:{
     height: '350px'
-  },
-  explaniationButton:{
-    color: theme.palette.common.white,
-    padding: theme.spacing(3),
-    backgroundColor: theme.palette.green[600],
-    '&:hover': {
-      backgroundColor: theme.palette.green[700],
-    },
   }
 }));
 
@@ -56,6 +45,7 @@ export default function ProfitabilitySimulation(props){
   
   const classes = useStyles();
   const theme = useTheme()
+  debugger
   const [values, setValues] = React.useState({
     pie: '',
     estateValue: '',
@@ -78,18 +68,6 @@ export default function ProfitabilitySimulation(props){
     setOpenDialog(!openDialog)
   }
 
-  function showDialog(){
-    let style = {dialogPaper: {minHeight: '100vh', maxHeight: '100vh'}}
-    return (
-      <Dialog maxWidth={10} classes={{ paper: style}} onClose={toggleDialog} aria-labelledby="simple-dialog-title" open={openDialog}>
-        <DialogTitle id="simple-dialog-title">Explicación</DialogTitle>
-        <DialogContent>
-          <iframe width="800" height="450" src="https://www.youtube.com/embed/sTpvUc9U6f8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </DialogContent>
-      </Dialog>
-    )
-  }
-
   function monthOfBreakEven(){
     let month = whenIsProfitable(
       Number(values.pie),
@@ -107,8 +85,12 @@ export default function ProfitabilitySimulation(props){
   }
 
   return (
-    <Grid container justify="center">
-      {showDialog()}
+    <Grid item direction="column" justify="center">
+      <ExplainedDialog
+        toggleDialog={toggleDialog}
+        openDialog={openDialog}
+        title={"Explicación"}
+      />
       <Grid container spacing={3}>
         <Grid item lg={2}>
           <SimulatorProfitabilityForm
@@ -121,34 +103,32 @@ export default function ProfitabilitySimulation(props){
             </Box>
           }
         </Grid>
-        <Grid item lg={10}>
-          {isValid() ? (
-            <ProfitabilityChart
-              pie={values.pie}
-              estateValue={values.estateValue}
-              rentValue={values.rentValue}
-              mortgageValue={values.mortgageValue}
-              yearsOfDebt={values.yearsOfDebt}
-              profitability={getAppartmentProfitability()/100}
-            />
-          ) : (
-            <Box p={2} className={classes.chartContainerEmptyBox}>
-              <Grid container className={classes.chartEmptyBox} justify="center" alignItems="center">
-                <Typography style={{textAlign: 'center'}}>
-                  Una vez simulada la rentabilidad, se mostrara un grafico que indica cual es la rentabilidad del inbueble con el pasar de los años
-                </Typography>
-              </Grid>
-            </Box>
-          )}
+        <Grid item lg={10} style={{minHeight: '90vh'}} className={classes.chartContainerEmptyBox}>
+          <Grid>
+            {isValid() ? (
+              <ProfitabilityChart
+                pie={values.pie}
+                estateValue={values.estateValue}
+                rentValue={values.rentValue}
+                mortgageValue={values.mortgageValue}
+                yearsOfDebt={values.yearsOfDebt}
+                profitability={getAppartmentProfitability()/100}
+              />
+            ) : (
+              <Box p={2} >
+                <Grid container className={classes.chartEmptyBox} justify="center" alignItems="center">
+                  <Typography style={{textAlign: 'center'}} variant="h4" color="textPrimary">
+                    Una vez simulada la rentabilidad, se mostrara un grafico que indica cual es la rentabilidad del inbueble con el pasar de los años
+                  </Typography>
+                </Grid>
+              </Box>
+            )}
+          </Grid>
+          <Grid container justify="center">
+            <ExplainedButton onclick={toggleDialog} title={"Te explicamos como leer el grafico"}/>
+          </Grid>
         </Grid>
       </Grid>
-      <Box mt={15}>
-        <Grid container justify="center">
-          <Button variant="contained" className={classes.explaniationButton} onClick={() => toggleDialog()}>
-            Te explicamos como leer el grafico
-          </Button>              
-        </Grid>
-      </Box>
     </Grid>
   )
 }

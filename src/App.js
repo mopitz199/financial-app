@@ -113,7 +113,6 @@ export default function MiniDrawer() {
       },
     }
   });
-
   const [open, setOpen] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(pages[0]);
 
@@ -245,8 +244,16 @@ export default function MiniDrawer() {
           </List>
         </Drawer>
         <main className={classes.content}>
-          <div className={classes.toolbar} />
-          {renderCurrentPage()}
+          <MediaQuery query="(min-width: 600px)">
+            <div style={{paddingTop: '64px', height: '100%', display: 'flex'}}>
+              {renderCurrentPage()}
+            </div>
+          </MediaQuery>
+          <MediaQuery query="(max-width: 599px)">
+            <div style={{paddingTop: '56px', height: '100%', display: 'flex'}}>
+              {renderCurrentPage()}
+            </div>
+          </MediaQuery>
         </main>
       </div>
     </ThemeProvider>

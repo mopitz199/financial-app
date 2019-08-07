@@ -45,7 +45,6 @@ export default function ProfitabilitySimulation(props){
   
   const classes = useStyles();
   const theme = useTheme()
-  debugger
   const [values, setValues] = React.useState({
     pie: '',
     estateValue: '',
@@ -85,13 +84,13 @@ export default function ProfitabilitySimulation(props){
   }
 
   return (
-    <Grid item direction="column" justify="center">
+    <Grid container>
       <ExplainedDialog
         toggleDialog={toggleDialog}
         openDialog={openDialog}
         title={"Explicación"}
       />
-      <Grid container spacing={3}>
+      <Grid container spacing={4} style={{padding: -theme.spacing(4)}}>
         <Grid item lg={2}>
           <SimulatorProfitabilityForm
             values={values}
@@ -103,8 +102,8 @@ export default function ProfitabilitySimulation(props){
             </Box>
           }
         </Grid>
-        <Grid item lg={10} style={{minHeight: '90vh'}} className={classes.chartContainerEmptyBox}>
-          <Grid>
+        <Grid item container lg={10}>
+          <Grid item container className={classes.chartContainerEmptyBox}>
             {isValid() ? (
               <ProfitabilityChart
                 pie={values.pie}
@@ -123,9 +122,6 @@ export default function ProfitabilitySimulation(props){
                 </Grid>
               </Box>
             )}
-          </Grid>
-          <Grid container justify="center">
-            <ExplainedButton onclick={toggleDialog} title={"Te explicamos como leer el grafico"}/>
           </Grid>
         </Grid>
       </Grid>

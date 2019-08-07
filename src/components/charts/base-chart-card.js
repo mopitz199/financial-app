@@ -44,7 +44,7 @@ export default function BaseChartCard(props){
   })
 
   return(
-    <Card style={{padding: theme.spacing(3)}}>
+    <Card style={{padding: theme.spacing(3), width:'100%'}}>
       <CardContent style={{padding: theme.spacing(0)}}>
         <Grid container justify="space-between" direction="column">
           <Typography color="textSecondary" variant="h6" component="h2">

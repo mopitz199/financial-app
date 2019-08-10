@@ -88,6 +88,7 @@ const useStyles = makeStyles(theme => ({
     ...theme.mixins.toolbar,
   },
   content: {
+    height: '100vh',
     flexGrow: 1,
     padding: theme.spacing(3),
   },

@@ -6,6 +6,7 @@ import Box from '@material-ui/core/Box';
 import DividendWithInterestRateVariableChart from '../components/charts/dividend-with-interest-rate-variable-chart';
 import SimulatorDividendForm from '../components/dividend-simulator-form';
 import {calculateFinalMortgage, getCurrentMortgageRate} from '../utils';
+import ExplainedDialog from '../components/explained-dialog';
 
 const useStyles = makeStyles(theme => ({
   fullWidth: {
@@ -48,6 +49,12 @@ export default function MortgageSimulation(props){
     debtYears: '',
   });
 
+  const [openDialog, setOpenDialog] = React.useState(false)
+
+  function toggleDialog(){
+    setOpenDialog(!openDialog)
+  }
+
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value });
   };
@@ -67,11 +74,17 @@ export default function MortgageSimulation(props){
 
   return (
     <Grid container justify="center">
+      <ExplainedDialog
+        toggleDialog={toggleDialog}
+        openDialog={openDialog}
+        title={"Explicación"}
+      />
       <Grid container spacing={3}>
-        <Grid item lg={2}>
+        <Grid item lg={3}>
           <SimulatorDividendForm
             values={values}
             handleChange={handleChange}
+            onHelpClick={toggleDialog}
           />
           {isValid() &&
             <Box mt={1} p={2} className={classes.resultBox}>
@@ -79,25 +92,27 @@ export default function MortgageSimulation(props){
             </Box>
           }
         </Grid>
-        <Grid item lg={10}>
-          {isValid() ? (
-            <DividendWithInterestRateVariableChart
-              estateValue={values.estateValue}
-              mortgageCreditValue={values.mortgageCreditValue}
-              debtYears={values.debtYears}
-              mortgageInterestRateData={props.mortgageInterestRateData}
-            />
-          ) : (
-            <Box p={2} className={classes.chartContainerEmptyBox}>
-              <Grid container className={classes.chartEmptyBox} justify="center" alignItems="center">
-                <Typography style={{textAlign: 'center'}}>
+        <Grid item container lg={9}>
+          <Grid container className={classes.chartContainerEmptyBox} style={{padding: theme.spacing(4)}}>
+            {isValid() ? (
+              <Box style={{height: '70%'}}>
+                <DividendWithInterestRateVariableChart
+                  estateValue={values.estateValue}
+                  mortgageCreditValue={values.mortgageCreditValue}
+                  debtYears={values.debtYears}
+                  mortgageInterestRateData={props.mortgageInterestRateData}
+                />
+              </Box>
+            ) : (
+              <Grid container alignItems="center" justify="center" direction="column">
+                <Typography style={{textAlign: 'center'}} variant="h4" color="textPrimary">
                   Una vez simulado el credito, aca mostraremos un grafico de como
                   influye el dividendo dependiendo de la tasa de interes de los bancos.
                   Importante destacar que esta simulacion es referencial.
                 </Typography>
               </Grid>
-            </Box>
-          )}
+            )}
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

@@ -3,6 +3,8 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import HelpOutline from '@material-ui/icons/HelpOutline';
+import IconButton from '@material-ui/core/IconButton';
 
 const useStyles = makeStyles(theme => ({
   fullWidth: {
@@ -28,7 +30,14 @@ export default function SimulatorDividendForm(props){
 
   return (
     <Grid container>
-      <Typography variant="h5">Simluador credito hipotecario</Typography>
+      <Grid container justify="center" alignItems="center">
+        <Typography variant="h5" style={{marginRight: theme.spacing(1)}}>
+          Simluador credito hipotecario
+        </Typography>
+        <IconButton onClick={props.onHelpClick}>
+          <HelpOutline/>
+        </IconButton>
+      </Grid>
       <TextField
         id="outlined-name"
         className={classes.fullWidth}

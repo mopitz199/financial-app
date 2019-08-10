@@ -97,16 +97,16 @@ export default function Indicators(props){
         </Grid>
       </Grid>
       <Grid container justify="space-between" spacing={4} style={{marginTop: theme.spacing(2)}}>
-        <Grid item lg={6} md={12} xs={12}>
+        <Grid item lg={6} md={12} xs={12} style={{height: '500px'}}>
           <IDPVAppartmentChart irpdData={props.irpdData}/>
         </Grid>
-        <Grid item lg={6} md={12} xs={12}>
+        <Grid item lg={6} md={12} xs={12} style={{height: '500px'}}>
           <IDPVHouseChart irpdData={props.irpdData}/>
         </Grid>
-        <Grid item lg={6} md={12} xs={12}>
+        <Grid item lg={6} md={12} xs={12} style={{height: '500px'}}>
           <SuppyDemandChart nationalOfferData={props.nationalOfferData}/>
         </Grid>
-        <Grid item lg={6} md={12} xs={12}>
+        <Grid item lg={6} md={12} xs={12} style={{height: '500px'}}>
           <InterestRateChart
             mortgageInterestRateData={props.mortgageInterestRateData}
             consumerCreditInterestRateData={props.consumerCreditInterestRateData}

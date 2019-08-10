@@ -19,7 +19,7 @@ export default function ExplainedButton(props){
   const classes = useStyles();
 
   return (
-    <Button variant="contained" className={classes.explaniationButton} onClick={props.onclick}>
+    <Button variant="contained" className={classes.explaniationButton} onClick={props.onClick}>
       {props.title}
     </Button>
   )

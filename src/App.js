@@ -134,17 +134,21 @@ export default function MiniDrawer() {
     
     fetch('https://alf8ptidv9.execute-api.us-east-1.amazonaws.com/prod/appartment-interest-rate')
       .then(data => data.json())
-      .then((data) => setMortgageInterestRateData(data));
+      .then((data) => setMortgageInterestRateData(data))
+      .catch(error => setMortgageInterestRateData(null))
 
     fetch('https://alf8ptidv9.execute-api.us-east-1.amazonaws.com/prod/consumer-credit-interest-rate')
       .then(data => data.json())
       .then((data) => {
         setConsumerCreditInterestRateData(data)
-      });
+      })
+      .catch(error => setConsumerCreditInterestRateData(null))
 
     fetch('https://alf8ptidv9.execute-api.us-east-1.amazonaws.com/prod/commercial-interest-rate')
       .then(data => data.json())
-      .then((data) => setCommercialInterestRateData(data));
+      .then((data) => setCommercialInterestRateData(data))
+      .catch(error => setCommercialInterestRateData(null))
+
   }, [])
 
   function handleDrawerOpen() {

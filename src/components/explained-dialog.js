@@ -26,15 +26,15 @@ export default function ExplainedDialog(props){
   let style = {dialogPaper: {minHeight: '100vh', maxHeight: '100vh'}}
 
   return (
-    <Dialog fullWidth={true} maxWidth={"md"} classes={{ paper: style}} onClose={props.toggleDialog} aria-labelledby="simple-dialog-title" open={props.openDialog}>
+    <Dialog fullWidth={true} maxWidth={"md"} onClose={props.toggleDialog} aria-labelledby="simple-dialog-title" open={props.openDialog}>
       <DialogTitle id="simple-dialog-title">
-        <Typography variant="h6">{props.title}</Typography>
+        <Typography>{props.title}</Typography>
         <IconButton aria-label="close" className={classes.closeButton} onClick={props.toggleDialog}>
           <CloseIcon />
         </IconButton>
       </DialogTitle>
       <DialogContent style={{padding: '0px 24px 18px 24px'}}>
-        <iframe width="100%" height="450" src="https://www.youtube.com/embed/sTpvUc9U6f8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        <iframe width="100%" height="450" src="https://www.youtube.com/embed/sTpvUc9U6f8" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
       </DialogContent>
     </Dialog>
   )

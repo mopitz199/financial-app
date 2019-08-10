@@ -91,8 +91,9 @@ export default function ProfitabilitySimulation(props){
         title={"Explicación"}
       />
       <Grid container spacing={4} style={{padding: -theme.spacing(4)}}>
-        <Grid item lg={2}>
+        <Grid item lg={3}>
           <SimulatorProfitabilityForm
+            onHelpClick={toggleDialog}
             values={values}
             handleChange={handleChange}
           />
@@ -102,25 +103,25 @@ export default function ProfitabilitySimulation(props){
             </Box>
           }
         </Grid>
-        <Grid item container lg={10}>
-          <Grid item container className={classes.chartContainerEmptyBox}>
+        <Grid item container lg={9}>
+          <Grid container className={classes.chartContainerEmptyBox} style={{padding: theme.spacing(4)}}>
             {isValid() ? (
-              <ProfitabilityChart
-                pie={values.pie}
-                estateValue={values.estateValue}
-                rentValue={values.rentValue}
-                mortgageValue={values.mortgageValue}
-                yearsOfDebt={values.yearsOfDebt}
-                profitability={getAppartmentProfitability()/100}
-              />
-            ) : (
-              <Box p={2} >
-                <Grid container className={classes.chartEmptyBox} justify="center" alignItems="center">
-                  <Typography style={{textAlign: 'center'}} variant="h4" color="textPrimary">
-                    Una vez simulada la rentabilidad, se mostrara un grafico que indica cual es la rentabilidad del inbueble con el pasar de los años
-                  </Typography>
-                </Grid>
+              <Box style={{height: '70%'}}>
+                <ProfitabilityChart
+                  pie={values.pie}
+                  estateValue={values.estateValue}
+                  rentValue={values.rentValue}
+                  mortgageValue={values.mortgageValue}
+                  yearsOfDebt={values.yearsOfDebt}
+                  profitability={getAppartmentProfitability()/100}
+                />
               </Box>
+            ) : (
+              <Grid container alignItems="center" justify="center" direction="column">
+                <Typography style={{textAlign: 'center'}} variant="h4" color="textPrimary">
+                  Una vez simulada la rentabilidad, se mostrara un grafico que indica cual es la rentabilidad del inbueble con el pasar de los años
+                </Typography>
+              </Grid>
             )}
           </Grid>
         </Grid>

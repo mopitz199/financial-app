@@ -20,6 +20,28 @@ export default function BaseChartCard(props){
   const theme = useTheme();
   const classes = useStyles();
 
+  function renderChart(){
+    if(props.dataLength === null){
+      return (
+        <Grid container justify="center" alignItems="center" style={{'height': '100%'}}>
+          <Typography>Error al cargar los datos</Typography>
+        </Grid>
+      )
+    }else if(props.dataLength > 0){
+      return (
+        <ResponsiveContainer>
+          {props.children}
+        </ResponsiveContainer>
+      )
+    }else{
+      return (
+        <Grid container justify="center" alignItems="flex-start" style={{'height': '100%'}}>
+          <CircularProgress className={classes.progress} />
+        </Grid>
+      )
+    }
+  }
+
   const legendRender = props.legendData.map((data, index) => {
     return (
       <Grid
@@ -43,29 +65,21 @@ export default function BaseChartCard(props){
     )
   })
 
-  return(
-    <Card style={{padding: theme.spacing(3), width:'100%'}}>
-      <CardContent style={{padding: theme.spacing(0)}}>
-        <Grid container justify="space-between" direction="column">
-          <Typography color="textSecondary" variant="h6" component="h2">
-            {props.title}
-          </Typography>
-          <Box m={1}>
-            <Grid container justify="center">
-              {legendRender}
-            </Grid>
-          </Box>
-        </Grid>
-        {props.dataLength > 0 ? (
-          <ResponsiveContainer width="100%" height={350}>
-            {props.children}
-          </ResponsiveContainer>
-        ) : (
-          <Grid container justify="center" alignItems="center" style={{'height': '350px'}}>
-            <CircularProgress className={classes.progress} />
+  return (
+    <Grid container style={{height: '100%'}}>
+      <Grid container justify="space-between" direction="column" style={{alignSelf: 'start'}}>
+        <Typography color="textSecondary" variant="h6" component="h2">
+          {props.title}
+        </Typography>
+        <Box m={1}>
+          <Grid container justify="center">
+            {legendRender}
           </Grid>
-        )}
-      </CardContent>
-    </Card>
+        </Box>
+      </Grid>
+      <Grid container>
+        {renderChart()}
+      </Grid>
+    </Grid>
   )
 }
